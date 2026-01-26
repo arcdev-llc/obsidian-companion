@@ -1,7 +1,7 @@
-import { Completer, Model } from "../complete/complete";
+import type { Completer, Model } from "../complete/complete";
 import { available } from "../complete/completers";
 import { useState, useEffect } from "react";
-import Companion, { AcceptSettings } from "../main";
+import Companion, { type AcceptSettings } from "../main";
 import SettingsItem from "../components/SettingsItem";
 
 function Presets({

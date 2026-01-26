@@ -126,7 +126,10 @@ export default class ChatGPT implements Model {
     });
   }
 
-  parse_api_error(e: { status?: number }) {
+  parse_api_error(e: {
+    status?: number;
+    [key: string]: unknown;
+  }) {
     if (e.status === 429) {
       this.create_rate_limit_notice();
       throw new Error();
@@ -159,13 +162,16 @@ export default class ChatGPT implements Model {
         prompt,
         response.choices[0]?.message.content || ""
       );
-    } catch (e) {
-      this.parse_api_error(e);
-      throw e;
+    } catch (e: unknown) {
+      if (e && typeof e === "object" && "status" in e) {
+        this.parse_api_error(e as { status?: number });
+        throw e;
+      }
+      throw new Error("Unknown error");
     }
   }
 
-  async *iterate(prompt: Prompt, settings: string): AsyncGenerator<string> {
+  async * iterate(prompt: Prompt, settings: string): AsyncGenerator<string> {
     const model_settings = parse_model_settings(settings);
 
     try {
@@ -187,9 +193,12 @@ export default class ChatGPT implements Model {
           yield token;
         }
       }
-    } catch (e) {
-      this.parse_api_error(e);
-      throw e;
+    } catch (e: unknown) {
+      if (e && typeof e === "object" && "status" in e) {
+        this.parse_api_error(e as { status?: number });
+        throw e;
+      }
+      throw new Error("Unknown error");
     }
   }
 

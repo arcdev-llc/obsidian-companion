@@ -1,4 +1,5 @@
-[
+import type { Model } from "../types";
+const available_models: Model[] = [
 	{
 		"id": "large",
 		"name": "J2-Large",
@@ -15,3 +16,5 @@
 		"description": "As the largest and most powerful model in the Jurassic series, J2-Jumbo is an ideal choice for the most complex language processing tasks and generative text applications."
 	}
 ]
+
+export default available_models;

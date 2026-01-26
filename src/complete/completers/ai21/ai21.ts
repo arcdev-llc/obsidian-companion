@@ -1,8 +1,8 @@
-import { Completer, Model, Prompt } from "../../complete";
-import available_models from "./models.json";
+import type { Completer, Model, Prompt } from "../../complete";
+import available_models from "./models";
 import {
 	SettingsUI as ProviderSettingsUI,
-	Settings,
+	type Settings,
 	parse_settings,
 } from "./provider_settings";
 
@@ -46,8 +46,7 @@ export default class J2Model implements Model {
 		);
 		if (!response.ok) {
 			throw new Error(
-				`Jurassic-j2 API returned ${response.status} ${
-					(await response.json()).detail
+				`Jurassic-j2 API returned ${response.status} ${(await response.json()).detail
 				}`
 			);
 		}
