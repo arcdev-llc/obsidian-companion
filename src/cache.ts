@@ -1,6 +1,6 @@
-import { AcceptSettings } from "./main";
-import { Prompt, Model } from "./complete/complete";
-import { Suggestion } from "codemirror-companion-extension";
+import type { AcceptSettings } from "./main";
+import type { Prompt, Model } from "./complete/complete";
+import type { Suggestion } from "codemirror-companion-extension";
 
 function findLastRegexIndex(regex: RegExp, str: string) {
 	let match;
@@ -265,20 +265,20 @@ export class CompletionCacher {
 		).test(completion)
 			? completion
 			: completion.slice(
-					0,
-					findLastRegexIndex(
-						new RegExp(this.accept_settings.splitter_regex, "gi"),
-						completion
-					)
-			  );
+				0,
+				findLastRegexIndex(
+					new RegExp(this.accept_settings.splitter_regex, "gi"),
+					completion
+				)
+			);
 		const display_splitter_match = completion
 			.slice(this.accept_settings.min_display_length)
 			.match(new RegExp(this.accept_settings.display_splitter_regex));
 		const display_splitter_index =
 			display_splitter_match && display_splitter_match.index != undefined
 				? display_splitter_match.index +
-				  display_splitter_match.length +
-				  50
+				display_splitter_match.length +
+				50
 				: -1;
 		partial_completion = partial_completion.slice(
 			0,
@@ -294,9 +294,9 @@ export class CompletionCacher {
 			.match(new RegExp(this.accept_settings.splitter_regex));
 		const complete_splitter_index =
 			complete_splitter_match &&
-			complete_splitter_match.index != undefined
+				complete_splitter_match.index != undefined
 				? complete_splitter_match.index +
-				  this.accept_settings.min_accept_length
+				this.accept_settings.min_accept_length
 				: undefined;
 		const first_word = completion.slice(0, complete_splitter_index);
 

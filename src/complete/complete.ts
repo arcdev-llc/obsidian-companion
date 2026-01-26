@@ -1,4 +1,4 @@
-import * as React from "react";
+import type { ComponentType } from 'react';
 
 export interface Prompt {
 	prefix: string;
@@ -9,7 +9,7 @@ export interface Model {
 	id: string;
 	name: string;
 	description: string;
-	Settings?: React.ElementType<{
+	Settings?: ComponentType<{
 		settings: string | null;
 		saveSettings: (settings: string) => void;
 	}>;
