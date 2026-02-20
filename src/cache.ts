@@ -197,7 +197,7 @@ export class CompletionCacher {
 		if (queue.queue.length > 0) {
 			return;
 		}
-		this.fetch(prompt, stream);
+		void this.fetch(prompt, stream);
 	}
 
 	async *complete(
@@ -232,7 +232,7 @@ export class CompletionCacher {
 			yield this.strip(suggestion);
 		}
 
-		if (need_continuation) this.fetch(prompt, stream);
+		if (need_continuation) void this.fetch(prompt, stream);
 	}
 
 	strip(suggestion: Suggestion): Suggestion {

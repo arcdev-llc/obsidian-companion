@@ -1,3 +1,4 @@
+import React from "react";
 import {
   App,
   MarkdownView,
@@ -10,12 +11,13 @@ import {
 import { createRoot } from "react-dom/client";
 import {
   forceableInlineSuggestion,
-  Suggestion,
+  type Suggestion,
 } from "codemirror-companion-extension";
 import SettingsComponent from "./settings/settings";
 import { CompletionCacher } from "./cache";
 import { available } from "./complete/completers";
-import { Model } from "./complete/complete";
+import type { Model } from "./complete/complete";
+
 
 interface CompanionModelSettings {
   name: string;
@@ -167,11 +169,13 @@ export default class Companion extends Plugin {
   }
 
   async onload() {
-    await this.setupModelChoice();
-    await this.setupToggle();
-    await this.setupSuggestions();
-    await this.setupStatusbar();
-    await this.setupSuggestionCommands();
+    await Promise.all([
+      this.setupModelChoice(),
+      this.setupToggle(),
+      this.setupSuggestions(),
+      this.setupStatusbar(),
+      this.setupSuggestionCommands(),
+    ]);
 
     this.addSettingTab(new CompanionSettingsTab(this.app, this));
   }
@@ -199,7 +203,7 @@ export default class Companion extends Plugin {
         [preset.model]: preset.model_settings,
       },
     };
-    this.saveSettings();
+    void this.saveSettings();
   }
 
   savePreset(name: string) {
@@ -231,14 +235,14 @@ export default class Companion extends Plugin {
         enable_editor_command: false,
       });
     }
-    this.saveSettings();
+    void this.saveSettings();
   }
 
   deletePreset(name: string) {
     this.settings.presets = this.settings.presets.filter(
       (preset) => preset.name != name
     );
-    this.saveSettings();
+    void this.saveSettings();
   }
 
   async loadSettings() {
@@ -255,8 +259,7 @@ export default class Companion extends Plugin {
 
   async *triggerCompletion(): AsyncGenerator<Suggestion, void, unknown> {
     const view = this.app.workspace.getActiveViewOfType(MarkdownView);
-    if (!view) return;
-    if (!this.enabled) return;
+    if (!view || !this.enabled) return;
     if ((view.editor as any)?.cm?.cm?.state?.keyMap === "vim") {
       // Don't complete if vim mode is enabled
       // (hehe I know more about the types than typescript does)
@@ -400,7 +403,7 @@ export default class Companion extends Plugin {
         if (!completion) return;
         yield* completion;
       } catch (e) {
-        new Notice(`Error completing (fallback): ${e.message}`);
+        new Notice(`Error completing (fallback): ${e instanceof Error ? e.message : String(e)}`);
       }
     }
   }
@@ -409,6 +412,8 @@ export default class Companion extends Plugin {
     prefix: string,
     suffix: string
   ): AsyncGenerator<Suggestion> {
+
+
     try {
       try {
         const completion = this._complete(
@@ -418,18 +423,20 @@ export default class Companion extends Plugin {
           this.settings.model
         );
         yield* completion;
-      } catch (e) {
-        if (e.name === "ModelNotFound") {
-          this.select_first_available_model();
+      } catch (e: unknown) {
+        if (e && typeof e === "object" && "name" in e && e.name === "ModelNotFound") {
+          void this.select_first_available_model();
           yield* this.complete(prefix, suffix);
           return;
         }
+
         throw e;
       }
     } catch (e) {
-      if (e.message) {
+      if (e instanceof Error) {
         new Notice(`Error completing: ${e.message}`);
       }
+
       return this.fallback_complete(prefix, suffix);
     }
   }
@@ -496,7 +503,7 @@ class CompanionSettingsTab extends PluginSettingTab {
         await app.plugins.disablePlugin("companion");
         await app.plugins.enablePlugin("companion");
       };
-      reload();
+      void reload();
     }
   }
 }
