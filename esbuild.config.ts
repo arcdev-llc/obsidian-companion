@@ -34,6 +34,7 @@ const context = await esbuild.context({
     "@lezer/lr",
     ...builtins],
   format: "cjs",
+  jsx: "automatic",
   target: "es2018",
   logLevel: "info",
   sourcemap: prod ? false : "inline",

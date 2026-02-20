@@ -193,7 +193,10 @@ export default class Companion extends Plugin {
     const preset = this.settings.presets.find(
       (preset) => preset.name == name
     );
-    if (!preset) return;
+    if (!preset) {
+      new Notice(`Preset "${name}" not found`);
+      return;
+    }
 
     this.settings.provider = preset.provider;
     this.settings.model = preset.model;
@@ -207,31 +210,31 @@ export default class Companion extends Plugin {
   }
 
   savePreset(name: string) {
+    const provider_config =
+      this.settings.provider_settings[this.settings.provider];
+    if (!provider_config) {
+      new Notice(
+        "Configure the provider settings before saving a preset"
+      );
+      return;
+    }
     const preset = this.settings.presets.find(
       (preset) => preset.name == name
     );
     if (preset) {
       preset.provider = this.settings.provider;
       preset.model = this.settings.model;
-      preset.provider_settings =
-        this.settings.provider_settings[
-          this.settings.provider
-        ].settings;
+      preset.provider_settings = provider_config.settings;
       preset.model_settings =
-        this.settings.provider_settings[this.settings.provider].models[
-        this.settings.model
-        ];
+        provider_config.models[this.settings.model] ?? "";
     } else {
       this.settings.presets.push({
         name: name,
         provider: this.settings.provider,
         model: this.settings.model,
-        provider_settings:
-          this.settings.provider_settings[this.settings.provider]
-            .settings,
+        provider_settings: provider_config.settings,
         model_settings:
-          this.settings.provider_settings[this.settings.provider]
-            .models[this.settings.model],
+          provider_config.models[this.settings.model] ?? "",
         enable_editor_command: false,
       });
     }

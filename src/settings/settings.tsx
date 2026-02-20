@@ -1,3 +1,4 @@
+import { Notice } from "obsidian";
 import type { Completer, Model } from "../complete/complete";
 import { available } from "../complete/completers";
 import { useState, useEffect } from "react";
@@ -144,25 +145,29 @@ function ProviderModelChooser({
       if (!provider) return;
       setAvailableModels([]);
       _setModel(null);
-      const available_models = await provider.get_models(
-        plugin.settings.provider_settings[provider.id]?.settings
-      );
-      setAvailableModels(available_models);
-      const candidates = available_models.filter(
-        (model) => model.id === plugin.settings.model
-      );
-      _setModel(
-        candidates.length > 0 ? candidates[0] : available_models[0]
-      );
-      plugin.settings.model =
-        candidates.length > 0
-          ? candidates[0].id
-          : available_models[0].id;
-      _setModelSettings(
-        plugin.settings.provider_settings[provider.id]?.models[
-        plugin.settings.model
-        ]
-      );
+      try {
+        const available_models = await provider.get_models(
+          plugin.settings.provider_settings[provider.id]?.settings
+        );
+        setAvailableModels(available_models);
+        if (!available_models.length) return;
+        const candidates = available_models.filter(
+          (model) => model.id === plugin.settings.model
+        );
+        const selected =
+          candidates.length > 0 ? candidates[0] : available_models[0];
+        _setModel(selected);
+        plugin.settings.model = selected.id;
+        _setModelSettings(
+          plugin.settings.provider_settings[provider.id]?.models[
+          plugin.settings.model
+          ]
+        );
+      } catch (e) {
+        new Notice(
+          `Failed to load models: ${e instanceof Error ? e.message : String(e)}`
+        );
+      }
     };
     void fetch_model();
   }, [plugin.settings.model, provider, providerSettings]);
@@ -330,7 +335,9 @@ function AcceptSettingsComponent({
           type="number"
           value={delay}
           onChange={(e) => {
-            setDelay(parseInt(e.target.value));
+            const n = parseInt(e.target.value, 10);
+            if (Number.isNaN(n)) return;
+            setDelay(n);
           }}
         />
         <span>ms</span>
@@ -507,9 +514,12 @@ function AcceptSettingsComponent({
               type="number"
               value={accept_settings.min_accept_length}
               onChange={(e) => {
+                const n = parseInt(e.target.value, 10);
                 setAcceptSettings({
                   ...accept_settings,
-                  min_accept_length: parseInt(e.target.value),
+                  min_accept_length: Number.isNaN(n)
+                    ? accept_settings.min_accept_length
+                    : n,
                 });
               }}
             />
@@ -523,11 +533,12 @@ function AcceptSettingsComponent({
               type="number"
               value={accept_settings.min_display_length}
               onChange={(e) => {
+                const n = parseInt(e.target.value, 10);
                 setAcceptSettings({
                   ...accept_settings,
-                  min_display_length: parseInt(
-                    e.target.value
-                  ),
+                  min_display_length: Number.isNaN(n)
+                    ? accept_settings.min_display_length
+                    : n,
                 });
               }}
             />
@@ -541,11 +552,12 @@ function AcceptSettingsComponent({
               type="number"
               value={accept_settings.retrigger_threshold}
               onChange={(e) => {
+                const n = parseInt(e.target.value, 10);
                 setAcceptSettings({
                   ...accept_settings,
-                  retrigger_threshold: parseInt(
-                    e.target.value
-                  ),
+                  retrigger_threshold: Number.isNaN(n)
+                    ? accept_settings.retrigger_threshold
+                    : n,
                 });
               }}
             />

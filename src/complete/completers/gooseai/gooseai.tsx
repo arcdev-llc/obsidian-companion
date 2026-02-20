@@ -1,7 +1,8 @@
-import { Completer, Model, Prompt } from "../../complete";
+import React from "react";
+import type { Completer, Model, Prompt } from "../../complete";
 import {
   SettingsUI as ProviderSettingsUI,
-  Settings,
+  type Settings,
   parse_settings,
 } from "./provider_settings";
 
@@ -25,7 +26,7 @@ export default class OpenAIModel implements Model {
   }
 
   async complete(prompt: Prompt): Promise<string> {
-    const response = await fetch(
+    const res = await fetch(
       `https://api.goose.ai/v1/engines/${this.id}/completions`,
       {
         method: "POST",
@@ -39,9 +40,14 @@ export default class OpenAIModel implements Model {
           ),
         }),
       }
-    ).then((res) => res.json());
-
-    return response.choices[0].text || "";
+    );
+    const response = await res.json();
+    if (!res.ok) {
+      const msg =
+        response?.error?.message ?? response?.message ?? res.statusText;
+      throw new Error(`GooseAI API error: ${msg}`);
+    }
+    return response?.choices?.[0]?.text ?? "";
   }
 }
 
@@ -58,13 +64,21 @@ export class GooseAIComplete implements Completer {
 
   async get_models(settings: string) {
     const settings_obj = parse_settings(settings);
-    const engines = await fetch("https://api.goose.ai/v1/engines", {
+    const res = await fetch("https://api.goose.ai/v1/engines", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${settings_obj.api_key}`,
       },
-    }).then((res) => res.json());
-    return engines.data.map(
+    });
+    const engines = await res.json();
+    if (!res.ok) {
+      const msg =
+        engines?.error?.message ?? engines?.message ?? res.statusText;
+      throw new Error(`GooseAI API: ${msg}`);
+    }
+    const data = engines?.data;
+    if (!Array.isArray(data)) return [];
+    return data.map(
       (model: {
         id: string;
         name: string;
@@ -75,12 +89,7 @@ export class GooseAIComplete implements Completer {
         tokenizer: string;
         type: string;
       }) =>
-        new OpenAIModel(
-          model.id,
-          model.name,
-          model.description,
-          settings
-        )
+        new OpenAIModel(model.id, model.name, model.description, settings)
     );
   }
 

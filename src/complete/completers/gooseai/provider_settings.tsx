@@ -15,7 +15,7 @@ export const parse_settings = (data: string | null): Settings => {
       return { api_key: "" };
     }
     return settings;
-  } catch  {
+  } catch {
     return { api_key: "" };
   }
 };
@@ -61,14 +61,18 @@ export function SettingsUI({
         <input
           type="number"
           value={parse_settings(settings).context_length}
-          onChange={(e) =>
+          onChange={(e) => {
+            const n = parseInt(e.target.value, 10);
+            const current = parse_settings(settings);
             saveSettings(
               JSON.stringify({
-                api_key: parse_settings(settings).api_key,
-                context_length: parseInt(e.target.value),
+                api_key: current.api_key,
+                context_length: Number.isNaN(n)
+                  ? (current.context_length ?? 2048)
+                  : n,
               })
-            )
-          }
+            );
+          }}
         />
       </SettingsItem>
     </>
