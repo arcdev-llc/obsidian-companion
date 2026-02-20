@@ -44,7 +44,7 @@ function Presets({
               onClick={(_e) => {
                 preset.enable_editor_command =
                   !preset.enable_editor_command;
-                plugin.saveSettings();
+                void plugin.saveSettings();
                 setForceUpdate(force_update + 1);
                 reload_signal.reload = true;
               }}
@@ -98,7 +98,7 @@ function Presets({
             value={plugin.settings.fallback || ""}
             onChange={(e) => {
               plugin.settings.fallback = e.target.value;
-              plugin.saveSettings();
+              void plugin.saveSettings();
               setForceUpdate(force_update + 1);
             }}
           >
@@ -164,7 +164,7 @@ function ProviderModelChooser({
         ]
       );
     };
-    fetch_model();
+    void fetch_model();
   }, [plugin.settings.model, provider, providerSettings]);
 
   const setProvider = (provider_id: string) => {
@@ -175,7 +175,7 @@ function ProviderModelChooser({
       plugin.settings.provider_settings[provider_id]?.settings
     );
     plugin.settings.provider = provider_id;
-    plugin.saveData(plugin.settings);
+    void plugin.saveData(plugin.settings);
   };
 
   const setProviderSettings = (settings: string) => {
@@ -188,7 +188,7 @@ function ProviderModelChooser({
       },
     };
     plugin.models = [];
-    plugin.saveData(plugin.settings);
+    void plugin.saveData(plugin.settings);
   };
 
   const setModel = (model_id: string) => {
@@ -198,7 +198,7 @@ function ProviderModelChooser({
     _setModelSettings(
       plugin.settings.provider_settings[provider.id]?.models[model_id]
     );
-    plugin.saveData(plugin.settings);
+    void plugin.saveData(plugin.settings);
   };
 
   const setModelSettings = (settings: string) => {
@@ -212,7 +212,7 @@ function ProviderModelChooser({
       },
     };
     plugin.models = [];
-    plugin.saveData(plugin.settings);
+    void plugin.saveData(plugin.settings);
   };
 
   const ProviderSettings = provider?.Settings;
@@ -299,18 +299,18 @@ function AcceptSettingsComponent({
     for (const model of plugin.models) {
       model.cacher.accept_settings = settings;
     }
-    plugin.saveData(plugin.settings);
+    void plugin.saveData(plugin.settings);
   };
   const setDelay = (delay: number) => {
     _setDelay(delay);
     plugin.settings.delay_ms = delay;
-    plugin.saveData(plugin.settings);
+    void plugin.saveData(plugin.settings);
     reload_signal.reload = true;
   };
   const setKeybind = (keybind: string | null) => {
     _setKeybind(keybind);
     plugin.settings.keybind = keybind;
-    plugin.saveData(plugin.settings);
+    void plugin.saveData(plugin.settings);
     reload_signal.reload = true;
   };
 
@@ -590,7 +590,7 @@ export default function SettingsComponent({
               setEnableByDefault(!enable_by_default);
               plugin.settings.enable_by_default =
                 !enable_by_default;
-              plugin.saveData(plugin.settings);
+              void plugin.saveData(plugin.settings);
             }}
           />
         </SettingsItem>
@@ -614,7 +614,7 @@ export default function SettingsComponent({
             onClick={(_e) => {
               setStreamingMode(!streaming_mode);
               plugin.settings.stream = !streaming_mode;
-              plugin.saveData(plugin.settings);
+              void plugin.saveData(plugin.settings);
             }}
           />
         </SettingsItem>

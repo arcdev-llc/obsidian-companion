@@ -42,7 +42,7 @@ export const parse_settings = (data: string | null): Settings => {
       return { api_key: "", generation_settings: {} };
     }
     return settings;
-  } catch (e) {
+  } catch  {
     return { api_key: "", generation_settings: {} };
   }
 };

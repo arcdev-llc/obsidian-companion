@@ -17,7 +17,7 @@ export type ModelSettings = z.infer<typeof model_settings_schema>;
 const parse_model_settings = (settings: string): ModelSettings => {
   try {
     return model_settings_schema.parse(JSON.parse(settings));
-  } catch (e) {
+  } catch  {
     return {
       context_length: 4000,
     };

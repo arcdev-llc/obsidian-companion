@@ -100,7 +100,7 @@ export type ModelSettings = z.infer<typeof model_settings_schema>;
 const parse_model_settings = (settings: string): ModelSettings => {
   try {
     return model_settings_schema.parse(JSON.parse(settings));
-  } catch (e) {
+  } catch {
     return { context_length: 4000 };
   }
 };
@@ -214,10 +214,11 @@ export default class OobaboogaModel implements Model {
 
       return response;
     } catch (error: unknown) {
-      if (error && typeof error === "object" && "message" in error) {
+      if (error instanceof Error) {
         throw new Error(`Request failed: ${error.message}`);
+      } else {
+        throw new Error(`Unknown error: ${String(error)}`);
       }
-      throw new Error("Unknown error");
     }
   }
 

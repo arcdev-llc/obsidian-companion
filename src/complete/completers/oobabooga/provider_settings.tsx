@@ -18,7 +18,7 @@ export const parse_settings = (data: string | null): Settings => {
       return default_settings;
     }
     return settings;
-  } catch (e) {
+  } catch  {
     return default_settings;
   }
 };

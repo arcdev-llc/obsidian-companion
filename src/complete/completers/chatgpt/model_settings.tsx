@@ -26,7 +26,7 @@ export const parse_settings = (data: string | null): Settings => {
   try {
     const settings: unknown = JSON.parse(data);
     return settings_schema.parse(settings);
-  } catch (e) {
+  } catch  {
     return default_settings;
   }
 };

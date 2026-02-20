@@ -14,7 +14,7 @@ export const parse_settings = (data: string | null): Settings => {
       return { api_key: "" };
     }
     return settings;
-  } catch (e) {
+  } catch  {
     return { api_key: "" };
   }
 };

@@ -1,5 +1,5 @@
 import SettingsItem from "../../../components/SettingsItem";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 export const settings_schema = z.object({
   system_prompt: z.string(),
@@ -23,7 +23,7 @@ export const parse_settings = (data: string | null): Settings => {
   try {
     const settings: unknown = JSON.parse(data);
     return settings_schema.parse(settings);
-  } catch (e) {
+  } catch {
     return default_settings;
   }
 };
