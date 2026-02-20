@@ -1,0 +1,12 @@
+.ai-complete-advanced-settings {
+	padding-left: 1rem;
+}
+
+.setting-item.setting-item-vertical {
+	flex-direction: column;
+	align-items: stretch;
+	.setting-item-control {
+		flex: unset;
+		width: 100%;
+	}
+}
