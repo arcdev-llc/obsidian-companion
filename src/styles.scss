@@ -2,3 +2,18 @@
 @import "settings/settings.scss";
 @import "complete/completers.scss";
 
+:root {
+    /* Setting groups */
+    --setting-group-heading-color: var(--text-normal);
+    --setting-group-heading-size: var(--font-ui-medium);
+    --setting-group-heading-weight: var(--font-semibold);
+    --setting-items-background: var(--background-primary-alt);
+    --setting-items-padding: var(--size-4-5);
+    --setting-items-radius: var(--radius-l);
+    --setting-items-border-width: 0;
+    --setting-items-border-color: var(--background-modifier-border);
+}
+
+.ai-complete-section-header {
+	@apply text-left mb-2 font-[var(--setting-group-heading-size)] font-[var(--setting-group-heading-weight)] text-[var(--setting-group-heading-size)];
+}
