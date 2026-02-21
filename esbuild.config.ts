@@ -1,10 +1,7 @@
 import esbuild from "esbuild";
 import process from "process";
 import builtins from "builtin-modules";
-import { sassPlugin } from 'esbuild-sass-plugin'
-import postcss from 'postcss';
-import tailwindPostcss from '@tailwindcss/postcss';
-import autoprefixer from 'autoprefixer';
+import { sassEmbeddedLoader } from "./esbuild-sass-plugin";
 
 const banner =
   `/*
@@ -14,14 +11,6 @@ if you want to view the source, please visit the github repository of this plugi
 `;
 
 const prod = (process.argv[2] === "production");
-
-const postcssTransform = async (css: string, _resolveDir: string, filePath: string) => {
-  const result = await postcss([
-    tailwindPostcss(),
-    autoprefixer(),
-  ]).process(css, { from: filePath });
-  return result.css;
-};
 
 const context = await esbuild.context({
   banner: {
@@ -51,9 +40,7 @@ const context = await esbuild.context({
   sourcemap: prod ? false : "inline",
   treeShaking: true,
   outdir: ".",
-  plugins: [
-    sassPlugin({ transform: postcssTransform }),
-  ],
+  plugins: [sassEmbeddedLoader()],
 });
 
 if (prod) {
