@@ -1,4 +1,4 @@
-import SettingsItem from "../../../components/SettingsItem";
+import { SettingsItemLarge, SettingsItemSmall } from "../../../components/SettingsItem";
 import { z } from "zod/v4";
 
 export const settings_schema = z.object({
@@ -39,35 +39,39 @@ export function SettingsUI({
 
   return (
     <>
-      <SettingsItem name="System prompt" />
-      <textarea
-        className="ai-complete-ollama-full-width"
-        value={parsed_settings.system_prompt}
-        onChange={(e) =>
-          saveSettings(
-            JSON.stringify({
-              ...parsed_settings,
-              system_prompt: e.target.value,
-            })
-          )
-        }
-      />
-      <SettingsItem name="User prompt" />
-      <textarea
-        className="ai-complete-ollama-full-width"
-        value={parsed_settings.user_prompt}
-        onChange={(e) =>
-          saveSettings(
-            JSON.stringify({
-              ...parsed_settings,
-              user_prompt: e.target.value,
-            })
-          )
-        }
-      />
-      <SettingsItem name="Temperature">
+      <SettingsItemLarge name="System prompt">
+        <textarea
+          className="ai-complete-ollama-full-width"
+          value={parsed_settings.system_prompt}
+          onChange={(e) =>
+            saveSettings(
+              JSON.stringify({
+                ...parsed_settings,
+                system_prompt: e.target.value,
+              })
+            )
+          }
+        />
+      </SettingsItemLarge>
+      <SettingsItemLarge name="User prompt">
+        <textarea
+          className="ai-complete-ollama-full-width"
+          value={parsed_settings.user_prompt}
+          onChange={(e) =>
+            saveSettings(
+              JSON.stringify({
+                ...parsed_settings,
+                user_prompt: e.target.value,
+              })
+            )
+          }
+        />
+      </SettingsItemLarge>
+      <SettingsItemSmall name="Temperature" description="The temperature of the model's output">
         <input
+          className="w-full"
           type="number"
+          defaultValue={0.7}
           value={
             parsed_settings.temperature === undefined
               ? ""
@@ -82,7 +86,7 @@ export function SettingsUI({
             )
           }
         />
-      </SettingsItem>
+      </SettingsItemSmall>
     </>
   );
 }

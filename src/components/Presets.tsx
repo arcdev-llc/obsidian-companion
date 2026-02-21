@@ -60,7 +60,7 @@ export default function Presets() {
         name="Save preset"
         description="Save the current settings as a preset"
       >
-        <div className="ai-complete-save-preset">
+        <div className="ai-complete-save-preset w-full flex gap-2">
           <input
             type="text"
             placeholder="Preset name"

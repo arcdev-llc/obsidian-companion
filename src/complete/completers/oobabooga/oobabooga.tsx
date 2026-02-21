@@ -130,7 +130,7 @@ export default class OobaboogaModel implements Model {
     return (
       <>
         {model_settings_fields.map((property) => (
-          <SettingsItem
+          <SettingsItemSmall
             name={property.name}
             description={property.description}
           >

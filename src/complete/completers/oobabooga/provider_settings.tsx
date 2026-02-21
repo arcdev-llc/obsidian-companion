@@ -18,7 +18,7 @@ export const parse_settings = (data: string | null): Settings => {
       return default_settings;
     }
     return settings;
-  } catch  {
+  } catch {
     return default_settings;
   }
 };
@@ -31,7 +31,7 @@ export function SettingsUI({
   saveSettings: (settings: string) => void;
 }) {
   return (
-    <SettingsItem
+    <SettingsItemSmall
       name="API URL"
       description={
         <>

@@ -14,6 +14,7 @@ import {
   type Suggestion,
 } from "codemirror-companion-extension";
 import SettingsComponent from "./settings/settings";
+import { SettingsProvider } from "./state";
 import { CompletionCacher } from "./cache";
 import { available } from "./complete/completers";
 import type { Model } from "./complete/complete";
@@ -487,10 +488,12 @@ class CompanionSettingsTab extends PluginSettingTab {
     this.root = createRoot(containerEl);
     this.root.render(
       <React.StrictMode>
-        <SettingsComponent
+        <SettingsProvider
           plugin={this.plugin}
           reload_signal={this.reload_signal}
-        />
+        >
+          <SettingsComponent />
+        </SettingsProvider>
       </React.StrictMode>
     );
   }

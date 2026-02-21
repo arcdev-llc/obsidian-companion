@@ -1,4 +1,4 @@
-import SettingsItem from "../../../components/SettingsItem";
+import { SettingsItemLarge, SettingsItemSmall } from "../../../components/SettingsItem";
 import { z } from "zod";
 
 export const settings_schema = z.object({
@@ -26,7 +26,7 @@ export const parse_settings = (data: string | null): Settings => {
   try {
     const settings: unknown = JSON.parse(data);
     return settings_schema.parse(settings);
-  } catch  {
+  } catch {
     return default_settings;
   }
 };
@@ -42,44 +42,47 @@ export function SettingsUI({
 
   return (
     <>
-      <SettingsItem name="Rate limits" />
-      <p>
-        If you're getting rate limit errors, I can't really help. OpenAI
-        doesn't like you using their API too much. You can either{" "}
-        <a href="https://platform.openai.com/account/billing/overview">
-          upgrade your plan
-        </a>{" "}
-        or set up a fallback preset. A fallback will be used while the
-        plugin waits for the rate limit to reset; scroll down to the
-        "Presets" section to set one up.
-      </p>
-      <SettingsItem name="System prompt" />
-      <textarea
-        className="ai-complete-chatgpt-full-width"
-        value={parsed_settings.system_prompt}
-        onChange={(e) =>
-          saveSettings(
-            JSON.stringify({
-              ...parsed_settings,
-              system_prompt: e.target.value,
-            })
-          )
-        }
-      />
-      <SettingsItem name="User prompt" />
-      <textarea
-        className="ai-complete-chatgpt-full-width"
-        value={parsed_settings.user_prompt}
-        onChange={(e) =>
-          saveSettings(
-            JSON.stringify({
-              ...parsed_settings,
-              user_prompt: e.target.value,
-            })
-          )
-        }
-      />
-      <SettingsItem name="Temperature">
+      <SettingsItemSmall name="Rate limits">
+        <p>
+          If you're getting rate limit errors, I can't really help. OpenAI
+          doesn't like you using their API too much. You can either{" "}
+          <a href="https://platform.openai.com/account/billing/overview">
+            upgrade your plan
+          </a>{" "}
+          or set up a fallback preset. A fallback will be used while the
+          plugin waits for the rate limit to reset; scroll down to the
+          "Presets" section to set one up.
+        </p>
+      </SettingsItemSmall>
+      <SettingsItemLarge name="System prompt" description="Used to guide the model's behavior">
+        <textarea
+          className=""
+          value={parsed_settings.system_prompt}
+          onChange={(e) =>
+            saveSettings(
+              JSON.stringify({
+                ...parsed_settings,
+                system_prompt: e.target.value,
+              })
+            )
+          }
+        />
+      </SettingsItemLarge>
+      <SettingsItemLarge name="User prompt">
+        <textarea
+          className="w-full"
+          value={parsed_settings.user_prompt}
+          onChange={(e) =>
+            saveSettings(
+              JSON.stringify({
+                ...parsed_settings,
+                user_prompt: e.target.value,
+              })
+            )
+          }
+        />
+      </SettingsItemLarge>
+      <SettingsItemSmall name="Temperature">
         <input
           type="number"
           value={
@@ -96,8 +99,8 @@ export function SettingsUI({
             )
           }
         />
-      </SettingsItem>
-      <SettingsItem name="Top P">
+      </SettingsItemSmall>
+      <SettingsItemSmall name="Top P">
         <input
           type="number"
           value={
@@ -114,8 +117,8 @@ export function SettingsUI({
             )
           }
         />
-      </SettingsItem>
-      <SettingsItem name="Presence penalty">
+      </SettingsItemSmall>
+      <SettingsItemSmall name="Presence penalty">
         <input
           type="number"
           value={
@@ -132,8 +135,8 @@ export function SettingsUI({
             )
           }
         />
-      </SettingsItem>
-      <SettingsItem name="Frequency penalty">
+      </SettingsItemSmall>
+      <SettingsItemSmall name="Frequency penalty">
         <input
           type="number"
           value={
@@ -150,8 +153,8 @@ export function SettingsUI({
             )
           }
         />
-      </SettingsItem>
-      <SettingsItem
+      </SettingsItemSmall>
+      <SettingsItemSmall
         name="Prompt length"
         description={
           <>
@@ -176,7 +179,7 @@ export function SettingsUI({
             )
           }
         />
-      </SettingsItem>
+      </SettingsItemSmall>
     </>
   );
 }

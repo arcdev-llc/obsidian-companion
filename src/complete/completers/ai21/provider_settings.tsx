@@ -42,7 +42,7 @@ export const parse_settings = (data: string | null): Settings => {
       return { api_key: "", generation_settings: {} };
     }
     return settings;
-  } catch  {
+  } catch {
     return { api_key: "", generation_settings: {} };
   }
 };
@@ -62,7 +62,7 @@ function GenerationSettingsItem({
 }) {
   const parsed_settings = parse_settings(settings);
   return (
-    <SettingsItem name={id} description={description}>
+    <SettingsItemSmall name={id} description={description}>
       <input
         type="number"
         value={parsed_settings.generation_settings?.[id]}
@@ -105,7 +105,7 @@ function PenaltySettingsBooleanItem({
     state = true;
   }
   return (
-    <SettingsItem name={item} description={description}>
+    <SettingsItemSmall name={item} description={description}>
       <div
         className={"checkbox-container" + (state ? " is-enabled" : "")}
         onClick={(_e) =>
@@ -144,7 +144,7 @@ function PenaltySettings({
   const parsed_settings = parse_settings(settings);
   return (
     <>
-      <SettingsItem
+      <SettingsItemSmall
         name={
           <span
             className="ai-complete-jurassic-expandable"
@@ -157,7 +157,7 @@ function PenaltySettings({
       />
       {expanded && (
         <>
-          <SettingsItem
+          <SettingsItemSmall
             name="scale"
             description={`Controls the magnitude of the penalty. 1 <= int <= 500. Default: ${default_scale}`}
           >
@@ -252,7 +252,7 @@ export function SettingsUI({
 
   return (
     <>
-      <SettingsItem
+      <SettingsItemSmall
         name="API key"
         description={
           <>
@@ -271,7 +271,7 @@ export function SettingsUI({
           }
         />
       </SettingsItem>
-      <SettingsItem
+      <SettingsItemSmall
         name={
           <span
             className="ai-complete-jurassic-expandable"

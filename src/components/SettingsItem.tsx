@@ -1,18 +1,21 @@
+import clsx from 'clsx';
 import React from "react";
 
 type BaseProps = {
+  className?: string;
   name?: React.ReactNode;
   description?: React.ReactNode;
   children?: React.ReactNode;
 };
 
 export function SettingsItemSmall({
+  className,
   name,
   description,
   children,
 }: BaseProps) {
   return (
-    <div className="setting-item">
+    <div className={clsx("setting-item", className)}>
       {(name || description) && (
         <div className="setting-item-info">
           {name && <div className="setting-item-name">{name}</div>}
@@ -26,18 +29,18 @@ export function SettingsItemSmall({
   );
 }
 
-export function SettingsItemLarge({ name, description, children }: BaseProps) {
+export function SettingsItemLarge({ className, name, description, children }: BaseProps) {
   return (
-    <div className="flex flex-col gap-2 items-stretch bg-gray-100 p-2 rounded-md bg-[rgb(var(--setting-items-background))]]">
+    <div className={clsx("setting-item flex-col", className)}>
       {(name || description) && (
-        <div className="setting-item-info">
+        <div className="self-start">
           {name && <div className="setting-item-name">{name}</div>}
           {description && (
             <div className="setting-item-description">{description}</div>
           )}
         </div>
       )}
-      {children && <div className="">{children}</div>}
+      {children && <div className="setting-item-content w-full">{children}</div>}
     </div>
   );
 }

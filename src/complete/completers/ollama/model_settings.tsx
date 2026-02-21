@@ -1,4 +1,4 @@
-import SettingsItem from "../../../components/SettingsItem";
+import { SettingsItemSmall } from "../../../components/SettingsItem";
 import { z } from "zod/v4";
 
 export const settings_schema = z.object({
@@ -39,7 +39,7 @@ export function SettingsUI({
 
   return (
     <>
-      <SettingsItem name="System prompt" />
+      <SettingsItemSmall name="System prompt" />
       <textarea
         className="ai-complete-ollama-full-width"
         value={parsed_settings.system_prompt}
@@ -52,7 +52,7 @@ export function SettingsUI({
           )
         }
       />
-      <SettingsItem name="User prompt" />
+      <SettingsItemSmall name="User prompt" />
       <textarea
         className="ai-complete-ollama-full-width"
         value={parsed_settings.user_prompt}
@@ -65,7 +65,7 @@ export function SettingsUI({
           )
         }
       />
-      <SettingsItem name="Temperature">
+      <SettingsItemSmall name="Temperature">
         <input
           type="number"
           value={
@@ -82,7 +82,7 @@ export function SettingsUI({
             )
           }
         />
-      </SettingsItem>
+      </SettingsItemSmall>
     </>
   );
 }

@@ -132,7 +132,9 @@ export default class ChatJimmyModel implements Model {
 
   parseStreamLine(raw: string): { token: string; done: boolean } | null {
     const trimmed = raw.trim();
-    if (!trimmed || trimmed === "data: [DONE]") return null;
+    if (!trimmed) return null;
+    if (trimmed.includes("<|stats|>") || trimmed.includes("<|/stats|>")) return null;
+    if (trimmed === "data: [DONE]") return null;
     const data = trimmed.startsWith("data: ") ? trimmed.slice(6) : trimmed;
     try {
       const obj = JSON.parse(data);
@@ -207,10 +209,16 @@ export default class ChatJimmyModel implements Model {
       let generated = "";
       let started = false;
       let lineCount = 0;
+      let inStats = false;
       log("entering for-await loop");
       try {
         for await (const line of rl) {
           lineCount++;
+          if (line.includes("<|stats|>")) inStats = true;
+          if (inStats) {
+            if (line.includes("<|/stats|>")) inStats = false;
+            continue;
+          }
           if (lineCount <= 3) log("line", lineCount, "raw:", JSON.stringify(line));
           const parsed = this.parseStreamLine(line);
           if (!parsed) {

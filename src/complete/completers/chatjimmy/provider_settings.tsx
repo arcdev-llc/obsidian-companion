@@ -1,4 +1,4 @@
-import SettingsItem from "../../../components/SettingsItem";
+import { SettingsItemSmall } from "../../../components/SettingsItem";
 import { z } from "zod";
 
 export const settings_schema = z.object({
@@ -31,7 +31,7 @@ export function SettingsUI({
   saveSettings: (settings: string) => void;
 }) {
   return (
-    <SettingsItem
+    <SettingsItemSmall
       name="API route"
       description={
         <>
@@ -46,6 +46,6 @@ export function SettingsUI({
           saveSettings(JSON.stringify({ endpoint: e.target.value }))
         }
       />
-    </SettingsItem>
+    </SettingsItemSmall>
   );
 }

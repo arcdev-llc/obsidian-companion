@@ -1,4 +1,4 @@
-import SettingsItem from "../../../components/SettingsItem";
+import { SettingsItemSmall } from "../../../components/SettingsItem";
 import { z } from "zod";
 
 export const settings_schema = z.object({
@@ -18,7 +18,7 @@ export const parse_settings = (data: string | null): Settings => {
   try {
     const settings: unknown = JSON.parse(data);
     return settings_schema.parse(settings);
-  } catch  {
+  } catch {
     return default_settings;
   }
 };
@@ -31,7 +31,7 @@ export function SettingsUI({
   saveSettings: (settings: string) => void;
 }) {
   return (
-    <SettingsItem
+    <SettingsItemSmall
       name="API key"
       description={
         <>
@@ -49,6 +49,6 @@ export function SettingsUI({
           saveSettings(JSON.stringify({ api_key: e.target.value }))
         }
       />
-    </SettingsItem>
+    </SettingsItemSmall>
   );
 }

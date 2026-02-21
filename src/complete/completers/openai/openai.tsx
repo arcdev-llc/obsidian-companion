@@ -7,7 +7,7 @@ import {
   parse_settings,
 } from "./provider_settings";
 import OpenAI from "openai";
-import SettingsItem from "../../../components/SettingsItem";
+import { SettingsItemSmall } from "../../../components/SettingsItem";
 import { z } from "zod";
 
 export const model_settings_schema = z.object({
@@ -17,7 +17,7 @@ export type ModelSettings = z.infer<typeof model_settings_schema>;
 const parse_model_settings = (settings: string): ModelSettings => {
   try {
     return model_settings_schema.parse(JSON.parse(settings));
-  } catch  {
+  } catch {
     return {
       context_length: 4000,
     };
@@ -39,7 +39,7 @@ export default class OpenAIModel implements Model {
     settings: string | null;
     saveSettings: (settings: string) => void;
   }) => (
-    <SettingsItem
+    <SettingsItemSmall
       name="Context length"
       description="In characters, how much context should the model get"
     >
@@ -54,7 +54,7 @@ export default class OpenAIModel implements Model {
           )
         }
       />
-    </SettingsItem>
+    </SettingsItemSmall>
   );
 
   constructor(
@@ -85,7 +85,7 @@ export default class OpenAIModel implements Model {
 
       return response.choices[0].text || "";
     } catch (e) {
-      this.parse_api_error(e);
+      this.parse_api_error(e as { status?: number });
       throw e;
     }
   }

@@ -13,17 +13,12 @@ function AcceptPresets() {
         description={
           <div className="ai-complete-accept-description">
             <div>These are presets.</div>
-            <span
-              className="ai-complete-expand-trigger"
-              onClick={() => setExpanded(!expanded)}
-            >
-              {expanded ? "▾" : "▸"} Advanced controls
-            </span>
           </div>
         }
       >
-        <div className="ai-complete-accept-presets">
+        <div className="ai-complete-accept-presets grid grid-cols-[repeat(auto-fit,minmax(min(100%,12rem),1fr))] gap-2 px-2 min-w-0">
           <button
+            className="min-w-0 w-full"
             onClick={() =>
               setAcceptSettings({
                 splitter_regex: " ",
@@ -35,9 +30,10 @@ function AcceptPresets() {
               })
             }
           >
-            One word at a time
+            By word
           </button>
           <button
+            className="min-w-0 w-full"
             onClick={() =>
               setAcceptSettings({
                 splitter_regex: "\\.",
@@ -49,9 +45,10 @@ function AcceptPresets() {
               })
             }
           >
-            One sentence at a time
+            By sentence
           </button>
           <button
+            className="min-w-0 w-full"
             onClick={() =>
               setAcceptSettings({
                 splitter_regex: "\n",
@@ -63,9 +60,10 @@ function AcceptPresets() {
               })
             }
           >
-            One line at a time
+            By line
           </button>
           <button
+            className="min-w-0 w-full"
             onClick={() =>
               setAcceptSettings({
                 splitter_regex: "$",
@@ -77,8 +75,14 @@ function AcceptPresets() {
               })
             }
           >
-            Whole completion
+            Entire completion
           </button>
+        </div>
+        <div
+          className="ai-complete-expand-trigger setting-item-description"
+          onClick={() => setExpanded(!expanded)}
+        >
+          {expanded ? "▾" : "▸"} Advanced controls
         </div>
       </SettingsItemLarge>
       {expanded && (

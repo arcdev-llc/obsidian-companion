@@ -29,7 +29,7 @@ export function SettingsUI({
 }) {
   return (
     <>
-      <SettingsItem
+      <SettingsItemSmall
         name="API key"
         description={
           <>
@@ -54,7 +54,7 @@ export function SettingsUI({
           }
         />
       </SettingsItem>
-      <SettingsItem
+      <SettingsItemSmall
         name="Context length"
         description="How much information to give the model (in characters)"
       >

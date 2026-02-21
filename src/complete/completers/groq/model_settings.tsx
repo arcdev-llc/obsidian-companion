@@ -25,7 +25,7 @@ export const parse_settings = (data: string | null): Settings => {
   try {
     const settings: unknown = JSON.parse(data);
     return settings_schema.parse(settings);
-  } catch  {
+  } catch {
     return default_settings;
   }
 };
@@ -41,7 +41,7 @@ export function SettingsUI({
 
   return (
     <>
-      <SettingsItem name="System prompt" />
+      <SettingsItemSmall name="System prompt" />
       <textarea
         className="ai-complete-groq-full-width"
         value={parsed_settings.system_prompt}
@@ -54,7 +54,7 @@ export function SettingsUI({
           )
         }
       />
-      <SettingsItem name="User prompt" />
+      <SettingsItemSmall name="User prompt" />
       <textarea
         className="ai-complete-groq-full-width"
         value={parsed_settings.user_prompt}
@@ -67,7 +67,7 @@ export function SettingsUI({
           )
         }
       />
-      <SettingsItem name="Temperature">
+      <SettingsItemSmall name="Temperature">
         <input
           type="number"
           value={
@@ -85,7 +85,7 @@ export function SettingsUI({
           }
         />
       </SettingsItem>
-      <SettingsItem name="Prompt length">
+      <SettingsItemSmall name="Prompt length">
         <input
           type="number"
           value={

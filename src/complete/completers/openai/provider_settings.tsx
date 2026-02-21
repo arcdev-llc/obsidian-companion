@@ -1,4 +1,4 @@
-import SettingsItem from "../../../components/SettingsItem";
+import { SettingsItemSmall } from "../../../components/SettingsItem";
 
 export interface Settings {
   api_key: string;
@@ -14,7 +14,7 @@ export const parse_settings = (data: string | null): Settings => {
       return { api_key: "" };
     }
     return settings;
-  } catch  {
+  } catch {
     return { api_key: "" };
   }
 };
@@ -27,7 +27,7 @@ export function SettingsUI({
   saveSettings: (settings: string) => void;
 }) {
   return (
-    <SettingsItem
+    <SettingsItemSmall
       name="API key"
       description={
         <>
@@ -45,6 +45,6 @@ export function SettingsUI({
           saveSettings(JSON.stringify({ api_key: e.target.value }))
         }
       />
-    </SettingsItem>
+    </SettingsItemSmall>
   );
 }
